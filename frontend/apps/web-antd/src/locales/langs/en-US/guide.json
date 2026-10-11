@@ -1,0 +1,28 @@
+{
+  "title": "Integration Guide",
+  "subtitle": "Open API onboarding: app creation, authentication and call examples",
+  "tabs": {
+    "flow": "Onboarding",
+    "errors": "Error Codes"
+  },
+  "flow": {
+    "title": "Onboarding Flow",
+    "step1": "Admin syncs API list from knife4j in \"API Management\" and opens the APIs to expose.",
+    "step2": "Create an app in \"App Management\"; AppKey/AppSecret are generated automatically (secret visible only on create/reset).",
+    "step3": "Grant APIs to the app in \"Authorization\"; unauthorized APIs are rejected with 403.",
+    "step4": "Call APIs with the four auth headers; the signature string must match the backend URI (without the /api gateway prefix).",
+    "step5": "See \"Error Codes\" on 401/403; reset the secret immediately if leaked.",
+    "headersTitle": "Auth Headers",
+    "headerDesc": "Description",
+    "h1": "App identifier from App Management",
+    "h2": "Millisecond timestamp, server allows ±5 min drift",
+    "h3": "One-time nonce (UUID), not reusable within 10 minutes",
+    "h4": "HMAC-SHA256 signature (lowercase hex), see below",
+    "signTitle": "Signature Algorithm"
+  },
+  "errors": {
+    "e401": "Unknown AppKey / missing headers / timestamp drift / replayed nonce / signature mismatch.",
+    "e403": "App disabled, or API not opened / not granted to this app.",
+    "tip": "Note: use the backend path (e.g. /requirement/products) in the signature string, without the /api prefix."
+  }
+}

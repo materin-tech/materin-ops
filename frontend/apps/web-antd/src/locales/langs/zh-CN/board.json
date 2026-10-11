@@ -1,0 +1,11 @@
+{
+  "title": "任务看板",
+  "desc": "拖拽卡片流转任务状态",
+  "projectPh": "项目",
+  "iterationPh": "迭代",
+  "tasks": "个任务",
+  "colPending": "待处理",
+  "colProcessing": "进行中",
+  "colConfirming": "待确认",
+  "colDone": "已完成"
+}

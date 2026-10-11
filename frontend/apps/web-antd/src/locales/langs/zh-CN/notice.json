@@ -1,0 +1,18 @@
+{
+  "title": "我的通知",
+  "desc": "站内通知收件箱",
+  "all": "全部",
+  "unread": "未读",
+  "read": "已读",
+  "readAll": "全部已读",
+  "markRead": "标为已读",
+  "del": "删除",
+  "delConfirm": "确认删除该通知？",
+  "deleted": "已删除",
+  "readAllDone": "已全部标记为已读",
+  "empty": "暂无通知",
+  "unRead": "未读",
+  "loadMore": "加载更多",
+  "profile": "个人中心",
+  "profileDesc": "个人信息与账号安全"
+}

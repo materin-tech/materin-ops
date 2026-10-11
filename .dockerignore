@@ -1,0 +1,8 @@
+# Docker build context 排除项（context 为仓库根目录）
+.git
+**/node_modules
+**/dist
+!h5/dist
+**/target
+**/.turbo
+deploy/.env

@@ -1,0 +1,27 @@
+# Java / Maven
+backend/target/
+*.class
+**/target/
+# Node
+node_modules/
+frontend/apps/*/dist/
+frontend/packages/*/dist/
+frontend/internal/*/dist/
+**/node_modules/
+
+*.tsbuildinfo
+**/dist/
+# IDE
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+
+# OS
+.DS_Store
+
+# Logs / local env
+logs/
+*.log
+.env.local
+/.claude/

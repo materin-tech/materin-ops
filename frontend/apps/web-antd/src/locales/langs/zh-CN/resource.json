@@ -1,0 +1,18 @@
+{
+  "title": "资源管理",
+  "desc": "系统中所有文件资源，支持 local / obs / minio 多存储",
+  "query": "查询",
+  "keywordPh": "文件名",
+  "upload": "上传资源",
+  "download": "下载",
+  "delete": "删除",
+  "delConfirm": "确认删除该资源？",
+  "uploaded": "上传成功",
+  "deleted": "已删除",
+  "name": "文件名",
+  "type": "类型",
+  "size": "大小",
+  "storage": "存储",
+  "time": "上传时间",
+  "action": "操作"
+}

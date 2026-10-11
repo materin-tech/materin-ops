@@ -1,0 +1,11 @@
+{
+  "title": "Task Board",
+  "desc": "Drag cards to move tasks",
+  "projectPh": "Project",
+  "iterationPh": "Iteration",
+  "tasks": "tasks",
+  "colPending": "Pending",
+  "colProcessing": "Processing",
+  "colConfirming": "Confirming",
+  "colDone": "Done"
+}

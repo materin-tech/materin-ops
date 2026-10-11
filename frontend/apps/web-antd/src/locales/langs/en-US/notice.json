@@ -1,0 +1,18 @@
+{
+  "title": "My Notices",
+  "desc": "Inbox",
+  "all": "All",
+  "unread": "Unread",
+  "read": "Read",
+  "readAll": "Mark All Read",
+  "markRead": "Mark read",
+  "del": "Delete",
+  "delConfirm": "Delete this notice?",
+  "deleted": "Deleted",
+  "readAllDone": "All marked read",
+  "empty": "No notices",
+  "unRead": "Unread",
+  "loadMore": "Load more",
+  "profile": "Profile",
+  "profileDesc": "Personal info"
+}

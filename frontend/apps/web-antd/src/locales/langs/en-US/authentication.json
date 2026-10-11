@@ -1,0 +1,12 @@
+{
+  "welcomeBack": "Welcome back",
+  "loginSubtitle": "Sign in to materin-ops",
+  "usernameTip": "Please enter username",
+  "username": "Username",
+  "password": "Password",
+  "passwordTip": "Please enter password",
+  "verifyRequiredTip": "Please complete slider verification",
+  "rememberMe": "Remember account",
+  "pageTitle": "Materin Ops Platform",
+  "pageDesc": "Tickets · Requirements · Open API"
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Resources",
+  "desc": "All file resources, local / obs / minio storages",
+  "query": "Search",
+  "keywordPh": "file name",
+  "upload": "Upload",
+  "download": "Download",
+  "delete": "Delete",
+  "delConfirm": "Delete this resource?",
+  "uploaded": "Uploaded",
+  "deleted": "Deleted",
+  "name": "File Name",
+  "type": "Type",
+  "size": "Size",
+  "storage": "Storage",
+  "time": "Uploaded At",
+  "action": "Actions"
+}

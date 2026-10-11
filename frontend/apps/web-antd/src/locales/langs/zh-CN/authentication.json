@@ -1,0 +1,12 @@
+{
+  "welcomeBack": "欢迎回来",
+  "loginSubtitle": "账号登录，进入格物运维平台",
+  "usernameTip": "请输入用户名",
+  "username": "用户名",
+  "password": "密码",
+  "passwordTip": "请输入密码",
+  "verifyRequiredTip": "请先完成滑块验证",
+  "rememberMe": "记住账号",
+  "pageTitle": "格物运维平台",
+  "pageDesc": "工单 · 需求 · 开放 API 一体化运维中台"
+}
