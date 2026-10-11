@@ -70,3 +70,40 @@ pnpm dev
 - [ ] 前端登录对接（替换 vben mock 接口为后端真实接口）
 - [ ] 工单域：工单类型、工单提交、流转（受理/处理/关闭）、评论与附件
 - [ ] 通知与统计看板
+
+## 应用矩阵
+
+| 端 | 地址 | 技术栈 | 说明 |
+|---|---|---|---|
+| PC 管理端 | http://localhost | Vue Vben Admin 5 + Antd | 全功能（含系统管理/开发者中心） |
+| H5 移动端 | http://localhost:81 | Vue3 + Vant 4 | 工作台 / 产品 / 工单（无系统管理） |
+| API 文档 | http://localhost/doc.html | Knife4j | 开放 API 对接依据 |
+
+## 快速开始
+
+```bash
+# 前置：Docker + Node 22 + Java 21 + Maven
+cp deploy/.env.example deploy/.env
+
+# 后端（容器内构建）
+docker compose -f deploy/docker-compose.yml build backend frontend h5
+docker compose -f deploy/docker-compose.yml up -d
+
+# 默认账号：admin / 123456（生产务必修改）
+
+## 前端开发模式
+cd frontend && pnpm install && pnpm dev
+cd h5 && npm install && npm run dev
+```
+
+## 测试体系
+
+| 层 | 工具 | 位置 |
+|---|---|---|
+| 产品功能用例 | 66 条矩阵 | docs/materin-ops-测试用例.xlsx（生成器 docs/generators/） |
+| 后端单测 | JUnit5 + Mockito | backend/*/src/test，`mvn test` |
+| E2E | Playwright | e2e/，`npx playwright test` |
+| API 自动化/压测 | JMeter（Docker） | jmeter/，`bash jmeter/smoke.sh` 冒烟 12 项 |
+| APP 鉴权专项 | python3 | docs/generators/verify_app_auth.py（16 项） |
+
+详见 docs/test-plan.md 与 docs/product-spec.md。
