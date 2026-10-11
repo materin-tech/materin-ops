@@ -79,6 +79,11 @@ pnpm dev
 | H5 移动端 | http://localhost:81 | Vue3 + Vant 4 | 工作台 / 产品 / 工单（无系统管理） |
 | API 文档 | http://localhost/doc.html | Knife4j | 开放 API 对接依据 |
 
+## Kubernetes 部署
+
+完整 manifests 见 [`deploy/kubernetes/`](deploy/kubernetes/README.md)（Namespace/MySQL/Redis/Backend×2+HPA/PC/H5/Ingress），
+镜像构建与升级说明见其中 README。
+
 ## 快速开始
 
 ```bash

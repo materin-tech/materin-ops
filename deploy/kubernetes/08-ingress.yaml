@@ -1,0 +1,29 @@
+# 需要 ingress-nginx 已安装（kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml）
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: materin-ops
+  namespace: materin-ops
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"   # 资源上传
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ops.example.com          # PC 管理端（改实际域名）
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port: { number: 80 }
+    - host: m.ops.example.com        # H5 移动端（改实际域名）
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: h5
+                port: { number: 80 }

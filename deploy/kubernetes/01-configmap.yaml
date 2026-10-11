@@ -1,0 +1,15 @@
+# 后端应用配置（覆盖 application.yml 中的对应项）
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: materin-ops
+data:
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/materin_ops?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true"
+  SPRING_DATASOURCE_USERNAME: "materin"
+  SPRING_DATAREDIS_HOST: "redis"
+  SPRING_DATAREDIS_PORT: "6379"
+  # 文件资源本地存储路径（挂载 PVC）
+  RESOURCE_STORAGE_TYPE: "local"
+  RESOURCE_LOCAL_PATH: "/data/files"
+  TZ: "Asia/Shanghai"

@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-nginx-conf
+  namespace: materin-ops
+data:
+  default.conf: |
+    # PC 管理端：SPA + API 反代（K8s 版：resolver 指向集群 DNS）
+    server {
+      listen 80;
+      root /usr/share/nginx/html;
+      index index.html;
+      gzip on;
+      gzip_types text/css application/javascript application/json image/svg+xml;
+
+      location /api/ {
+        set $backend_upstream http://backend:8080;
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass $backend_upstream;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+      location / { try_files $uri $uri/ /index.html; }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: materin-ops
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: materin-ops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: nginx
+          image: ghcr.io/materin-tech/materin-ops-web:v1.0.0
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: conf
+              mountPath: /etc/nginx/conf.d/
+            - name: dist
+              mountPath: /usr/share/nginx/html
+          readinessProbe:
+            httpGet: { path: /, port: 80 }
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { cpu: 200m, memory: 128Mi }
+      volumes:
+        - name: conf
+          configMap:
+            name: web-nginx-conf
+        # PC 前端 dist 由 CI/CD 构建（Init 容器或镜像内打包，见 README）
+        - name: dist
+          emptyDir: {}
