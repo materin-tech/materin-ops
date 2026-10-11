@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="materin-ops API 自动化">
+      <stringProp name="TestPlan.comments">登录→提取token→工单CRUD→通知（断言 code=0）</stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
+        <collectionProp name="TestPlan.user_defined_variables"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP默认值">
+        <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+        <stringProp name="HTTPSampler.port">${__P(port,80)}</stringProp>
+        <stringProp name="HTTPSampler.protocol">http</stringProp>
+      </ConfigTestElement>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="全局头">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="登录-工单-通知场景">
+        <stringProp name="ThreadGroup.num_threads">${__P(threads,1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampup,1)}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${__P(loops,3)}</stringProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="01 登录">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"username":"admin","password":"123456"}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.path">/api/auth/login</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        </HTTPSamplerProxy>
+<hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="登录头">
+          <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+          </collectionProp>
+        </HeaderManager>
+<hashTree/>
+        <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="提取 token">
+          <stringProp name="JSONPostProcessor.referenceNames">token</stringProp>
+          <stringProp name="JSONPostProcessor.jsonPathExprs">$.data.accessToken</stringProp>
+          <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          <stringProp name="JSONPostProcessor.defaultValues">NONE</stringProp>
+        </JSONPostProcessor>
+<hashTree/>
+        <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="断言 登录成功">
+          <stringProp name="JSON_PATH">$.code</stringProp>
+          <stringProp name="EXPECTED_VALUE">0</stringProp>
+          <boolProp name="JSONVALIDATION">true</boolProp>
+          <boolProp name="JSONEXPECTED">true</boolProp>
+        </JSONPathAssertion>
+<hashTree/>
+</hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="02 工单列表">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.path">/api/ticket/tickets?page=1&amp;pageSize=10</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        </HTTPSamplerProxy>
+<hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="鉴权头">
+          <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${token}</stringProp>
+              </elementProp>
+          </collectionProp>
+        </HeaderManager>
+<hashTree/>
+        <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="断言 工单列表成功">
+          <stringProp name="JSON_PATH">$.code</stringProp>
+          <stringProp name="EXPECTED_VALUE">0</stringProp>
+          <boolProp name="JSONVALIDATION">true</boolProp>
+          <boolProp name="JSONEXPECTED">true</boolProp>
+        </JSONPathAssertion>
+<hashTree/>
+</hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="03 创建工单">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"title": "JMETER-${__threadNum}-${__counter(FALSE)}", "type": 3, "priority": 3}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.path">/api/ticket/tickets</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        </HTTPSamplerProxy>
+<hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="创建头">
+          <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${token}</stringProp>
+              </elementProp>
+          </collectionProp>
+        </HeaderManager>
+<hashTree/>
+        <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="断言 创建成功">
+          <stringProp name="JSON_PATH">$.code</stringProp>
+          <stringProp name="EXPECTED_VALUE">0</stringProp>
+          <boolProp name="JSONVALIDATION">true</boolProp>
+          <boolProp name="JSONEXPECTED">true</boolProp>
+        </JSONPathAssertion>
+<hashTree/>
+</hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="04 未读通知数">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.path">/api/notice/unread-count</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        </HTTPSamplerProxy>
+<hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="通知头">
+          <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${token}</stringProp>
+              </elementProp>
+          </collectionProp>
+        </HeaderManager>
+<hashTree/>
+        <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="断言 未读数成功">
+          <stringProp name="JSON_PATH">$.code</stringProp>
+          <stringProp name="EXPECTED_VALUE">0</stringProp>
+          <boolProp name="JSONVALIDATION">true</boolProp>
+          <boolProp name="JSONEXPECTED">true</boolProp>
+        </JSONPathAssertion>
+<hashTree/>
+
+</hashTree>
+
+      <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="05 APP 签名调用（正向 GET，断言 code=0）">
+        <stringProp name="scriptLanguage">groovy</stringProp>
+        <stringProp name="filename"></stringProp>
+        <stringProp name="parameters"></stringProp>
+        <stringProp name="cacheKey">true</stringProp>
+        <stringProp name="script">import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+import java.security.MessageDigest
+
+def post(url, admin, payload) {
+    def c = new URL(url).openConnection()
+    c.requestMethod = 'POST'
+    c.doOutput = true
+    c.setRequestProperty('Authorization', 'Bearer ' + admin)
+    c.setRequestProperty('Content-Type', 'application/json')
+    c.outputStream.bytes = payload.getBytes('UTF-8')
+    return new groovy.json.JsonSlurper().parse(c.inputStream)
+}
+def put(url, admin, payload) {
+    def c = new URL(url).openConnection()
+    c.requestMethod = 'PUT'
+    c.doOutput = true
+    c.setRequestProperty('Authorization', 'Bearer ' + admin)
+    c.setRequestProperty('Content-Type', 'application/json')
+    c.outputStream.bytes = payload.getBytes('UTF-8')
+    return new groovy.json.JsonSlurper().parse(c.inputStream)
+}
+def getJson(url, admin) {
+    def c = new URL(url).openConnection()
+    c.requestMethod = 'GET'
+    c.setRequestProperty('Authorization', 'Bearer ' + admin)
+    return new groovy.json.JsonSlurper().parse(c.inputStream)
+}
+
+def host = props.get('host')
+def port = props.get('port')
+def ADMIN = vars.get('token')
+def apiBase = 'http://' + host + ':' + port + '/api'
+
+// 1. 取或建 APP
+def list = getJson(apiBase + '/developer/apps?pageSize=1', ADMIN)
+def appKey, appSecret, appId
+if (list.data.total &gt; 0) {
+    appKey = list.data.list[0].appKey
+    appSecret = list.data.list[0].appSecret
+    appId = list.data.list[0].id
+} else {
+    def created = post(apiBase + '/developer/apps', ADMIN, '{"name":"JMETER-APP"}')
+    appKey = created.data.appKey
+    appSecret = created.data.appSecret
+    appId = created.data.id
+}
+
+// 2. 目标接口：开放 + 授权
+def apiList = getJson(apiBase + '/developer/apis?pageSize=500', ADMIN)
+def target = apiList.data.list.find { it.method == 'GET' &amp;&amp; it.path == '/requirement/products' }
+if (target.status != 1) {
+    put(apiBase + '/developer/apis/' + target.id, ADMIN, '{"status":1}')
+}
+def g = getJson(apiBase + '/developer/auth/apps/' + appId + '/apis', ADMIN)
+if (!g.data.authorizedApiIds.contains(target.id)) {
+    put(apiBase + '/developer/auth/apps/' + appId + '/apis', ADMIN, '[' + target.id + ']')
+}
+
+// 3. HMAC-SHA256 签名（签名串用后端路径，不带 /api 前缀）
+def method = 'GET'
+def path = '/requirement/products'
+def ts = String.valueOf(System.currentTimeMillis())
+def nonce = UUID.randomUUID().toString()
+def bh = MessageDigest.getInstance('SHA-256').digest(''.getBytes('UTF-8')).encodeHex().toString()
+def ss = String.join('\n', appKey, method, path, ts, nonce, bh)
+def mac = Mac.getInstance('HmacSHA256')
+mac.init(new SecretKeySpec(appSecret.getBytes('UTF-8'), 'HmacSHA256'))
+def sig = mac.doFinal(ss.getBytes('UTF-8')).encodeHex().toString()
+
+// 4. 调用（网关路径带 /api 前缀）
+def conn = new URL('http://' + host + ':' + port + '/api' + path).openConnection()
+conn.requestMethod = 'GET'
+conn.setRequestProperty('X-App-Key', appKey)
+conn.setRequestProperty('X-Timestamp', ts)
+conn.setRequestProperty('X-Nonce', nonce)
+conn.setRequestProperty('X-Signature', sig)
+def code = conn.responseCode
+def body = (code &lt; 400 ? conn.inputStream : conn.errorStream).getText('UTF-8')
+
+def ok = (code == 200 &amp;&amp; body.contains('"code":0'))
+SampleResult.setSuccessful(ok)
+SampleResult.setResponseData('APP signed GET ' + path + ' -&gt; http=' + code + ' body=' + body.substring(0, Math.min(80, body.length())), 'UTF-8')
+SampleResult.setResponseCode(String.valueOf(code))</stringProp>
+      </JSR223Sampler>
+      <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,39 @@
+# 本地开发用：仅启动中间件，前后端在本机跑（mvn spring-boot:run / pnpm dev）
+# 注意：3306 与全栈 compose 及旧容器冲突时，先停掉占用方或改 MYSQL_PORT
+#   docker compose -f docker-compose.middleware.yml up -d
+
+services:
+  mysql:
+    image: docker.m.daocloud.io/library/mysql:8.4
+    container_name: materin-ops-mysql
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-materin_ops}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # 当前骨架未用到 Redis，预留以备 Sa-Token 分布式会话等后续需要
+  redis:
+    image: docker.m.daocloud.io/library/redis:7-alpine
+    container_name: materin-ops-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:

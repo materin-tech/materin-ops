@@ -1,0 +1,6 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f7f8fa; font-size: 14px; -webkit-font-smoothing: antialiased; }
+.page { padding-bottom: 60px; }
+.desc-html { line-height: 1.7; word-break: break-word; }
+.desc-html img { max-width: 100%; }
+.desc-html p { margin: 4px 0; }
