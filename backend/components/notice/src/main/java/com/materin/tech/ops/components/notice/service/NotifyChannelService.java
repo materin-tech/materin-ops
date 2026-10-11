@@ -10,6 +10,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class NotifyChannelService {
 
-    private static final QueryColumn C_TYPE = new QueryColumn("type");
     private static final QueryColumn C_ENABLED = new QueryColumn("enabled");
 
     private final NotifyChannelMapper notifyChannelMapper;
@@ -35,13 +35,11 @@ public class NotifyChannelService {
                 .collect(Collectors.toMap(ImChannelSender::type, Function.identity()));
     }
 
-    /** 全量渠道列表 */
     public List<NotifyChannel> listAll() {
         return notifyChannelMapper.selectListByQuery(
                 QueryWrapper.create().orderBy(new QueryColumn("id").asc()));
     }
 
-    /** 保存（新增或编辑） */
     public void save(NotifyChannel body) {
         String type = body.getType() == null ? "" : body.getType();
         if (!senders.containsKey(type)) {
@@ -59,19 +57,15 @@ public class NotifyChannelService {
             exist.setSecret(body.getSecret());
             exist.setEnabled(body.getEnabled() == null ? 1 : body.getEnabled());
             notifyChannelMapper.update(exist);
-            exist.setId(body.getId());
         }
     }
 
-    /** 删除渠道（逻辑删除） */
     public void delete(Long id) {
         requireChannel(id);
         notifyChannelMapper.deleteById(id);
     }
 
-    /**
-     * 连通性测试：向渠道发送测试消息。
-     */
+    /** 连通性测试：向渠道发送测试消息 */
     public String test(Long id) {
         NotifyChannel channel = requireChannel(id);
         ImChannelSender sender = senders.get(channel.getType());
@@ -80,15 +74,13 @@ public class NotifyChannelService {
         }
         try {
             return sender.send(channel, "【格物】渠道测试",
-                    "这是一条渠道连通性测试消息，收到即代表配置成功。- " + java.time.LocalDateTime.now());
+                    "这是一条渠道连通性测试消息，收到即代表配置成功。- " + LocalDateTime.now());
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.INTERNAL_ERROR, "渠道调用失败：" + e.getMessage());
         }
     }
 
-    /**
-     * 广播：站内信之外，把消息推送到所有启用的 IM 渠道（失败不影响主流程，仅记日志）。
-     */
+    /** 广播到所有启用的 IM 渠道（失败仅记日志，不影响主流程） */
     public void broadcastToIm(String title, String markdown) {
         List<NotifyChannel> channels = notifyChannelMapper.selectListByQuery(
                 QueryWrapper.create().where(C_ENABLED.eq(1)));
@@ -98,8 +90,8 @@ public class NotifyChannelService {
                 continue;
             }
             try {
-                String resp = sender.send(channel, title, markdown);
-                log.info("IM 渠道 [{}] 推送结果: {}", channel.getName(), resp);
+                log.info("IM 渠道 [{}] 推送结果: {}", channel.getName(),
+                        sender.send(channel, title, markdown));
             } catch (Exception e) {
                 log.warn("IM 渠道 [{}] 推送失败: {}", channel.getName(), e.getMessage());
             }

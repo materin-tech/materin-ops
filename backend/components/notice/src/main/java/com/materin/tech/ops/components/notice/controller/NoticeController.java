@@ -7,7 +7,7 @@ import com.materin.tech.ops.common.api.Result;
 import com.materin.tech.ops.common.notice.NoticeMessage;
 import com.materin.tech.ops.components.notice.entity.Notice;
 import com.materin.tech.ops.components.notice.entity.NotifyChannel;
-import com.materin.tech.ops.components.notice.service.NoticeChannelService;
+import com.materin.tech.ops.components.notice.service.NotifyChannelService;
 import com.materin.tech.ops.components.notice.service.NoticeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -37,7 +37,7 @@ import java.util.List;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    private final NoticeChannelService notifyChannelService;
+    private final NotifyChannelService notifyChannelService;
 
     /** 我的收件箱分页 */
     @GetMapping("/my")

@@ -4,6 +4,7 @@ import com.materin.tech.ops.components.notice.entity.NotifyChannel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -27,11 +28,21 @@ public class FeishuChannelSender implements ImChannelSender {
         Map<String, Object> payload = Map.of(
                 "msg_type", "text",
                 "content", Map.of("text", "【" + title + "】\n" + plain));
-        String resp = RestClient.create().post()
-                .uri(channel.getWebhookUrl())
-                .body(payload)
-                .retrieve()
-                .body(String.class);
-        return resp;
+        return post(channel.getWebhookUrl(), payload);
+    }
+
+    private static final java.net.http.HttpClient HTTP_CLIENT =
+            java.net.http.HttpClient.newHttpClient();
+
+    private String post(String url, Map<String, Object> payload) throws Exception {
+        String json = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(payload);
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+                .build();
+        java.net.http.HttpResponse<String> resp =
+                HTTP_CLIENT.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+        return resp.body();
     }
 }

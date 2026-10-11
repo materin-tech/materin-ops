@@ -33,13 +33,11 @@ public class DingtalkChannelSender implements ImChannelSender {
             String stringToSign = ts + "\n" + channel.getSecret();
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(channel.getSecret().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-            String sign = URLEncoder.encode(
-                    Base64.getEncoder().encodeToString(mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8))),
-                    StandardCharsets.UTF_8);
+            String sign = Base64.getEncoder().encodeToString(mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8)));
             url = UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("timestamp", ts)
                     .queryParam("sign", sign)
-                    .build(false)
+                    .encode()
                     .toUriString();
         }
         Map<String, Object> payload = Map.of(
@@ -51,5 +49,20 @@ public class DingtalkChannelSender implements ImChannelSender {
                 .retrieve()
                 .body(String.class);
         return resp;
+    }
+
+    private static final java.net.http.HttpClient HTTP_CLIENT =
+            java.net.http.HttpClient.newHttpClient();
+
+    private String post(String url, Map<String, Object> payload) throws Exception {
+        String json = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(payload);
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+                .build();
+        java.net.http.HttpResponse<String> resp =
+                HTTP_CLIENT.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+        return resp.body();
     }
 }

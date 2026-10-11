@@ -90,7 +90,7 @@ async function submit() {
 }
 
 async function remove(row: NotifyChannel) {
-  await deleteChannel(row.id);
+  await deleteChannel((row as NotifyChannel).id!);
   message.success('已删除');
   await load();
 }
@@ -98,7 +98,7 @@ async function remove(row: NotifyChannel) {
 async function doTest(row: NotifyChannel) {
   testing.value = true;
   try {
-    await testChannel(row.id);
+    await testChannel((row as NotifyChannel).id!);
     message.success(`测试消息已推送，请到 ${TYPE_LABEL[row.type]} 群查看`);
   } catch (e: any) {
     message.error(e?.message || '渠道调用失败');
