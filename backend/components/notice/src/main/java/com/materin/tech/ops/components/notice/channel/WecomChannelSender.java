@@ -2,7 +2,6 @@ package com.materin.tech.ops.components.notice.channel;
 
 import com.materin.tech.ops.components.notice.entity.NotifyChannel;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;

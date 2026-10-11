@@ -1,7 +1,0 @@
-timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
-1791700569594,115,01 登录,200,,登录-工单-通知场景 1-1,text,true,,486,227,1,1,http://host.docker.internal/api/auth/login,112,0,12
-1791700569725,4,02 工单列表,200,,登录-工单-通知场景 1-1,text,true,,3520,277,1,1,http://host.docker.internal/api/ticket/tickets?page=1&pageSize=10,4,0,1
-1791700569730,10,03 创建工单,200,,登录-工单-通知场景 1-1,text,true,,631,300,1,1,http://host.docker.internal/api/ticket/tickets,10,0,1
-1791700569741,3,04 未读通知数,200,,登录-工单-通知场景 1-1,text,true,,296,263,1,1,http://host.docker.internal/api/notice/unread-count,2,0,1
-1791700569744,501,05 APP 签名调用（正向 GET，断言 code=0）,500,"javax.script.ScriptException: groovy.lang.MissingMethodException: No signature of method: sun.net.www.http.PosterOutputStream.write() is applicable for argument types: (String) values: [[55[93]]
-Possible solutions: write([B), write(int), write(int), wait(), wait(long), write([B, int, int)",登录-工单-通知场景 1-1,text,false,,0,0,1,1,null,0,0,0

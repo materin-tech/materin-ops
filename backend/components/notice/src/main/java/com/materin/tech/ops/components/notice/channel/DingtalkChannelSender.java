@@ -2,7 +2,6 @@ package com.materin.tech.ops.components.notice.channel;
 
 import com.materin.tech.ops.components.notice.entity.NotifyChannel;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.crypto.Mac;
@@ -43,12 +42,7 @@ public class DingtalkChannelSender implements ImChannelSender {
         Map<String, Object> payload = Map.of(
                 "msgtype", "markdown",
                 "markdown", Map.of("title", title, "text", "**" + title + "**\n" + markdownContent));
-        String resp = RestClient.create().post()
-                .uri(url)
-                .body(payload)
-                .retrieve()
-                .body(String.class);
-        return resp;
+        return post(url, payload);
     }
 
     private static final java.net.http.HttpClient HTTP_CLIENT =

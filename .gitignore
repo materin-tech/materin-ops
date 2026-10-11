@@ -25,3 +25,11 @@ logs/
 *.log
 .env.local
 /.claude/
+
+# 测试产物（结果文件/截图/会话）
+*.jtl
+jmeter/result*.jtl
+e2e/test-results/
+playwright-report/
+.claude/
+docs/*.xlsx
