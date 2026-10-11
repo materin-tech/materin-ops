@@ -67,6 +67,10 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
       config.headers.Authorization = formatToken(accessStore.accessToken);
       config.headers['Accept-Language'] = preferences.app.locale;
+      // 全链路追踪：每个请求携带 request-id，后端透传/生成 trace-id
+      const requestId = crypto.randomUUID().replaceAll('-', '');
+      config.headers['X-Trace-Id'] = requestId;
+      (window as any).__lastTraceId = requestId;
       return config;
     },
   });
@@ -117,6 +121,15 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       formatToken,
     }),
   );
+
+  // 记录后端返回的 traceId（与前端 request-id 一致或后端生成）
+  client.addResponseInterceptor({
+    fulfilled: (response) => {
+      const traceId = response?.headers?.['x-trace-id'];
+      if (traceId) (window as any).__lastTraceId = traceId;
+      return response;
+    },
+  });
 
   // 通用的错误处理,如果没有进入上面的错误处理逻辑，就会进入这里
   client.addResponseInterceptor(

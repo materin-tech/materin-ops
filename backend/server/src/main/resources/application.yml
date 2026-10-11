@@ -55,6 +55,11 @@ mybatis-flex:
   configuration:
     map-underscore-to-camel-case: true
 
+logging:
+  pattern:
+    # 控制台与文件日志统一携带 traceId（TraceIdFilter 写入 MDC）
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{traceId}] %logger{36} - %msg%n"
+
 sa-token:
   # token 从请求头读取，前端需以 "Authorization: Bearer <token>" 形式携带（与 vben 前端一致）
   token-name: Authorization

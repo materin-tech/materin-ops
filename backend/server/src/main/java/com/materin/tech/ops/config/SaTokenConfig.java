@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SaTokenConfig implements WebMvcConfigurer {
 
-    private static final List<String> OPEN_PATHS = List.of("/auth/login", "/doc.html", "/v3/api-docs/**", "/webjars/**", "/favicon.ico");
+    private static final List<String> OPEN_PATHS = List.of("/auth/login", "/track/report", "/doc.html", "/v3/api-docs/**", "/webjars/**", "/favicon.ico");
 
     private final OpenApiAuthInterceptor openApiAuthInterceptor;
 

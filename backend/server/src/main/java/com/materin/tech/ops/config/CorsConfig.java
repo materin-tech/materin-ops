@@ -37,6 +37,7 @@ public class CorsConfig {
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
+        config.addExposedHeader("X-Trace-Id");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));

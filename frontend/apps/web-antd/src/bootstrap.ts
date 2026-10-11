@@ -10,6 +10,7 @@ import '@vben/styles/antd';
 import { useTitle } from '@vueuse/core';
 
 import { $t, setupI18n } from '#/locales';
+import { initTrack } from '#/utils/track';
 
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
@@ -55,6 +56,9 @@ async function bootstrap(namespace: string) {
 
   // 配置路由及路由守卫
   app.use(router);
+
+  // 全链路埋点：PV + data-track 点击自动采集
+  initTrack(router);
 
   // 配置Motion插件
   const { MotionPlugin } = await import('@vben/plugins/motion');
