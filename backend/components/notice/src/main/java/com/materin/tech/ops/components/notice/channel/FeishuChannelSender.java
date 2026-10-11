@@ -1,0 +1,37 @@
+package com.materin.tech.ops.components.notice.channel;
+
+import com.materin.tech.ops.components.notice.entity.NotifyChannel;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+
+import java.util.Map;
+
+/**
+ * 飞书自定义机器人：POST {webhook}，msg_type=text（富文本卡片用 interactive，此处以文本保兼容）。
+ */
+@Component
+public class FeishuChannelSender implements ImChannelSender {
+
+    @Override
+    public String type() {
+        return "feishu";
+    }
+
+    @Override
+    public String send(NotifyChannel channel, String title, String markdownContent) throws Exception {
+        // 飞书 text 消息不支持 markdown 渲染，剥离常见标记保证可读
+        String plain = markdownContent
+                .replace("**", "")
+                .replace("###", "")
+                .replaceAll("\\n{2,}", "\n");
+        Map<String, Object> payload = Map.of(
+                "msg_type", "text",
+                "content", Map.of("text", "【" + title + "】\n" + plain));
+        String resp = RestClient.create().post()
+                .uri(channel.getWebhookUrl())
+                .body(payload)
+                .retrieve()
+                .body(String.class);
+        return resp;
+    }
+}

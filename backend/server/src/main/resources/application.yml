@@ -1,0 +1,71 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    # 数据库连接信息按实际环境修改
+    url: jdbc:mysql://localhost:3306/materin_ops?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      # 本地开发默认连宿主机；容器部署由 SPRING_DATA_REDIS_HOST 环境变量覆盖
+      host: localhost
+      port: 6379
+      database: 0
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+# 文件资源存储配置：local（默认）/ obs（华为云）/ minio
+resource:
+  storage:
+    type: local
+    local:
+      base-path: ${RESOURCE_LOCAL_PATH:./data/files}
+    # obs:
+    #   end-point: obs.cn-north-4.myhuaweicloud.com
+    #   ak: xxx
+    #   sk: xxx
+    #   bucket: materin-ops
+    # minio:
+    #   end-point: http://localhost:9000
+    #   ak: xxx
+    #   sk: xxx
+    #   bucket: materin-ops
+
+mybatis-flex:
+  global-config:
+    print-banner: false
+    # 逻辑删除：实体中名为 deleted 的字段自动启用逻辑删除
+    logic-delete-column: deleted
+    logic-delete-value: 1
+    normal-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+
+sa-token:
+  # token 从请求头读取，前端需以 "Authorization: Bearer <token>" 形式携带（与 vben 前端一致）
+  token-name: Authorization
+  token-prefix: Bearer
+  is-read-cookie: false
+  is-read-header: true
+  # token 有效期 30 天（秒）
+  timeout: 2592000
+  # 不启用临时活跃过期
+  active-timeout: -1
+  token-style: uuid
+  is-log: false
+  # 允许同一账号多端同时登录
+  is-concurrent: true

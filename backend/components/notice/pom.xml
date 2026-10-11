@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.materin</groupId>
+        <artifactId>materin-ops-components</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>materin-ops-components-notice</artifactId>
+    <name>materin-ops-components-notice</name>
+    <description>通知组件：站内通知收发、已读管理，实现 common 的 NoticeSender SPI</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.materin</groupId>
+            <artifactId>materin-ops-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.materin</groupId>
+            <artifactId>materin-ops-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

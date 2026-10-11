@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.materin</groupId>
+        <artifactId>materin-ops-components-resource</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>materin-ops-components-resource-local</artifactId>
+    <name>materin-ops-components-resource-local</name>
+    <description>本地文件存储实现</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.materin</groupId>
+            <artifactId>materin-ops-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>
