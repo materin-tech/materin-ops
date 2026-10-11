@@ -106,4 +106,4 @@ cd h5 && npm install && npm run dev
 | API 自动化/压测 | JMeter（Docker） | jmeter/，`bash jmeter/smoke.sh` 冒烟 12 项 |
 | APP 鉴权专项 | python3 | docs/generators/verify_app_auth.py（16 项） |
 
-详见 docs/test-plan.md 与 docs/product-spec.md。
+详见 docs/：[部署指南](docs/deploy-guide.md) · [产品功能表述](docs/product-spec.md) · [测试计划](docs/test-plan.md)。
